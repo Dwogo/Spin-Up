@@ -6,13 +6,17 @@
  * When this callback is fired, it will toggle line 2 of the LCD text between
  * "I was pressed!" and nothing.
  */
-void on_center_button() {
+void on_center_button()
+{
   static bool pressed = false;
   pressed = !pressed;
-  if (pressed) {
-    pros::lcd::set_text(2, "I was pressed!");
-  } else {
-    pros::lcd::clear_line(2);
+  if (pressed)
+  {
+    pros::lcd::set_text(10, "Current Draw is W.I.P.");
+  }
+  else
+  {
+    pros::lcd::clear_line(10);
   }
 }
 
@@ -22,9 +26,13 @@ void on_center_button() {
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
-void initialize() {
+void initialize()
+{
   lcd::initialize();
-  lcd::set_text(1, "Hello PROS User!");
+  lcd::set_text(1, "Team: 2976G ");
+  lcd::set_text(2, "Name: Goonz");
+  lcd::set_text(3, "School: Christchurch Boys' High School");
+  lcd::set_text(4, "Made by: Phillip, Janzen, Blake, Frank, and Ethan");
 
   lcd::register_btn1_cb(on_center_button);
 }
@@ -60,20 +68,35 @@ void competition_initialize() {}
  */
 void autonomous() {}
 
-/**
- * Runs the operator control code. This function will be started in its own task
- * with the default priority and stack size whenever the robot is enabled via
- * the Field Management System or the VEX Competition Switch in the operator
- * control mode.
- *
- * If no competition control is connected, this function will run immediately
- * following initialize().
- *
- * If the robot is disabled or communications is lost, the
- * operator control task will be stopped. Re-enabling the robot will restart the
- * task, not resume it from where it left off.
- */
-void opcontrol() {
-  while (true) {
+void reversed()
+{
+  rev = (rev == 1) ? -1 : 1;
+
+  if (rev == -1) 
+  {
+  oleana.rumble("..");
+  delay(50);
+  oleana.print(0, 0, "Reversed");
+  }
+
+  if (rev == 1) 
+  {
+  oleana.rumble("-");
+  delay(50);
+  oleana.print(0, 0, "Normal");
+  }
+}
+
+void opcontrol()
+{
+  while (true)
+  {
+    if (oleana.get_digital_new_press(DIGITAL_DOWN)) reversed();
+    
+    GFM.move(((oleana.get_analog(ANALOG_LEFT_Y) - oleana.get_analog(ANALOG_LEFT_X)) * rev) - oleana.get_analog(ANALOG_RIGHT_X));
+    GBM.move(((oleana.get_analog(ANALOG_LEFT_Y) + oleana.get_analog(ANALOG_LEFT_X)) * rev) - oleana.get_analog(ANALOG_RIGHT_X));
+    RFM.move(((oleana.get_analog(ANALOG_LEFT_Y) + oleana.get_analog(ANALOG_LEFT_X)) * rev) + oleana.get_analog(ANALOG_RIGHT_X));
+    RBM.move(((oleana.get_analog(ANALOG_LEFT_Y) - oleana.get_analog(ANALOG_LEFT_X)) * rev) + oleana.get_analog(ANALOG_RIGHT_X));
+
   }
 }
