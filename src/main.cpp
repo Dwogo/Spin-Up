@@ -76,10 +76,13 @@ void opcontrol() {
       FW.move(127);
       scoop.move(127);
     }
-    else if (oleana.get_digital(DIGITAL_R1)) { 
+    else if (oleana.get_digital(DIGITAL_R1)) {
+      FW.move(0);
       scoop.move(127);
-    } else scoop.move(0);
-
+    } else {
+      FW.move(0);
+      scoop.move(0);
+    }
 
   }
 }
