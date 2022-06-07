@@ -1,40 +1,17 @@
 #include "assignment.hpp"
 
 /**
- * A callback function for LLEMU's center button.
- *
- * When this callback is fired, it will toggle line 2 of the LCD text between
- * "I was pressed!" and nothing.
- */
-void on_center_button()
-{
-  static bool pressed = false;
-  pressed = !pressed;
-  if (pressed)
-  {
-    pros::lcd::set_text(10, "Current Draw is W.I.P.");
-  }
-  else
-  {
-    pros::lcd::clear_line(10);
-  }
-}
-
-/**
  * Runs initialization code. This occurs as soon as the program is started.
  *
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
-void initialize()
-{
+void initialize() {
   lcd::initialize();
   lcd::set_text(1, "Team: 2976G ");
   lcd::set_text(2, "Name: Goonz");
   lcd::set_text(3, "School: Christchurch Boys' High School");
   lcd::set_text(4, "Made by: Phillip, Janzen, Blake, Frank, and Ethan");
-
-  lcd::register_btn1_cb(on_center_button);
 }
 
 /**
@@ -68,35 +45,41 @@ void competition_initialize() {}
  */
 void autonomous() {}
 
-void reversed()
-{
+void reversed() {
   rev = (rev == 1) ? -1 : 1;
 
-  if (rev == -1) 
-  {
-  oleana.rumble("..");
-  delay(50);
-  oleana.print(0, 0, "Reversed");
+  if (rev == -1) {
+    oleana.rumble("..");
+    delay(50);
+    oleana.print(0, 0, "Reversed");
   }
 
-  if (rev == 1) 
-  {
-  oleana.rumble("-");
-  delay(50);
-  oleana.print(0, 0, "Normal");
+  if (rev == 1) {
+    oleana.rumble("-");
+    delay(50);
+    oleana.print(0, 0, "Normal");
   }
 }
 
-void opcontrol()
-{
-  while (true)
-  {
-    if (oleana.get_digital_new_press(DIGITAL_DOWN)) reversed();
-    
+void opcontrol() {
+  while (true) {
+    if (oleana.get_digital_new_press(DIGITAL_DOWN))
+      reversed();
+
     GFM.move(((oleana.get_analog(ANALOG_LEFT_Y) - oleana.get_analog(ANALOG_LEFT_X)) * rev) - oleana.get_analog(ANALOG_RIGHT_X));
     GBM.move(((oleana.get_analog(ANALOG_LEFT_Y) + oleana.get_analog(ANALOG_LEFT_X)) * rev) - oleana.get_analog(ANALOG_RIGHT_X));
     RFM.move(((oleana.get_analog(ANALOG_LEFT_Y) + oleana.get_analog(ANALOG_LEFT_X)) * rev) + oleana.get_analog(ANALOG_RIGHT_X));
     RBM.move(((oleana.get_analog(ANALOG_LEFT_Y) - oleana.get_analog(ANALOG_LEFT_X)) * rev) + oleana.get_analog(ANALOG_RIGHT_X));
+
+
+    if (oleana.get_digital(DIGITAL_R2)) {
+      FW.move(127);
+      scoop.move(127);
+    }
+    else if (oleana.get_digital(DIGITAL_R1)) { 
+      scoop.move(127);
+    } else scoop.move(0);
+
 
   }
 }
