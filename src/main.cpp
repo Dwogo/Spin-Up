@@ -21,15 +21,18 @@ void conCtrl() {
     } else if (usrCtrl) {
       // Controlling the Conveyor and Flywheel Motors
       if (OLEANA.get_digital(DIGITAL_R2)) {
-        FW.move(127);
+        FWL.move(127);
+        FWR.move(127);
         CON.move(127);
       } else if (OLEANA.get_digital(DIGITAL_R1)) {
-        FW.move(0);
+        FWL.move(0);
+        FWR.move(0);
         CON.move(127);
       } else if (OLEANA.get_digital(DIGITAL_LEFT)) {
         CON.move(-127);
       } else {
-        FW.move(0);
+        FWL.move(0);
+        FWR.move(0);
         CON.move(0);
       }
     }

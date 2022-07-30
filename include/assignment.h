@@ -21,9 +21,12 @@ Motor RBM(3, MOTOR_GEARSET_18, true); // The front motor of the red gear side
 Motor RFM(6, MOTOR_GEARSET_18, true); // The back motor of the red gear side
 
 // Shootingtrain
-Motor CON(10, MOTOR_GEARSET_18, true); // Motor for the conveyor
-Motor FW(9, MOTOR_GEARSET_36, false);  // Motor for the flywheel
+Motor CON(11, MOTOR_GEARSET_18, true); // Motor for the conveyor
+Motor FWL(9, MOTOR_GEARSET_18, false); // Motor for the flywheel
+Motor FWR(10, MOTOR_GEARSET_18, true); // Motor for the flywheel
 
 // Widetrain
-Motor GWM(18, MOTOR_GEARSET_18, false); // Green side's motor for the horizontal expansian
-Motor RWM(19, MOTOR_GEARSET_18, false); // Red side's motor for the horizontal expansian
+Motor GWM(18, MOTOR_GEARSET_18,
+          false); // Green side's motor for the horizontal expansian
+Motor RWM(19, MOTOR_GEARSET_18,
+          false); // Red side's motor for the horizontal expansian
